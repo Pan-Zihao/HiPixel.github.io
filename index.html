@@ -1,94 +1,394 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="description" content="PAE: Prior-Aligned Autoencoders for Latent Diffusion. We study what makes a latent manifold diffusion-friendly and propose PAE to explicitly shape the latent manifold for better generation.">
-  <meta property="og:title" content="PAE: Prior-Aligned Autoencoders for Latent Diffusion"/>
-  <meta property="og:description" content="What Matters for Diffusion-Friendly Latent Manifold? Prior-Aligned Autoencoders achieve state-of-the-art gFID of 1.03 on ImageNet 256x256."/>
-  <meta property="og:url" content="https://https://pan-zihao.github.io//HiPixel"/>
-  <meta property="og:image" content="static/images/pae_teaser.png" />
-  <meta property="og:image:width" content="1200"/>
-  <meta property="og:image:height" content="630"/>
-  <meta name="twitter:title" content="PAE: Prior-Aligned Autoencoders for Latent Diffusion">
-  <meta name="twitter:description" content="What Matters for Diffusion-Friendly Latent Manifold? PAE achieves state-of-the-art gFID of 1.03 on ImageNet 256x256.">
-  <meta name="twitter:image" content="static/images/pae_teaser.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="keywords" content="latent diffusion, tokenizer, autoencoder, prior alignment, manifold, image generation, diffusion models, PAE">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>PAE: Prior-Aligned Autoencoders for Latent Diffusion</title>
+  
+  <!-- Primary Meta Tags -->
+  <!-- TODO: Replace with your paper title and author names -->
+  <meta name="title" content="HiPixel: Forcing a Representation Hierarchy in Pixel Diffusion Transformers">
+  <!-- TODO: Write a compelling 150-160 character description of your research -->
+  <meta name="description" content="BRIEF_DESCRIPTION_OF_YOUR_RESEARCH_CONTRIBUTION_AND_FINDINGS">
+  <!-- TODO: Add 5-10 relevant keywords for your research area -->
+  <meta name="keywords" content="KEYWORD1, KEYWORD2, KEYWORD3, machine learning, computer vision, AI">
+  <!-- TODO: List all authors -->
+  <meta name="author" content="Zihao Pan, Cheng Shi, Taihang Hu, Mengting Chen, Zhangquan Chen, Jinsong Lan, Xiaoyong Zhu, Bo Zheng, Sibei Yang">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <!-- TODO: Replace with your institution or lab name -->
+  <meta property="og:site_name" content="HiPixel Project Page">
+  <!-- TODO: Same as paper title above -->
+  <meta property="og:title" content="HiPixel: Forcing a Representation Hierarchy in Pixel Diffusion Transformers">
+  <!-- TODO: Same as description above -->
+  <meta property="og:description" content="BRIEF_DESCRIPTION_OF_YOUR_RESEARCH_CONTRIBUTION_AND_FINDINGS">
+  <!-- TODO: Replace with your actual website URL -->
+  <meta property="og:url" content="https://https://pan-zihao.github.io/HiPixel.github.io">
+  <!-- TODO: Create a 1200x630px preview image and update path -->
+  <meta property="og:image" content="https://YOUR_DOMAIN.com/static/images/social_preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="HiPixel: Forcing a Representation Hierarchy in Pixel Diffusion Transformers - Research Preview">
+  <meta property="article:published_time" content="2024-01-01T00:00:00.000Z">
+  <meta property="article:author" content="Zihao Pan">
+  <meta property="article:section" content="Research">
+  <meta property="article:tag" content="KEYWORD1">
+  <meta property="article:tag" content="KEYWORD2">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- TODO: Replace with your lab/institution Twitter handle -->
+  <meta name="twitter:site" content="@YOUR_TWITTER_HANDLE">
+  <!-- TODO: Replace with first author's Twitter handle -->
+  <meta name="twitter:creator" content="@AUTHOR_TWITTER_HANDLE">
+  <!-- TODO: Same as paper title above -->
+  <meta name="twitter:title" content="HiPixel: Forcing a Representation Hierarchy in Pixel Diffusion Transformers">
+  <!-- TODO: Same as description above -->
+  <meta name="twitter:description" content="BRIEF_DESCRIPTION_OF_YOUR_RESEARCH_CONTRIBUTION_AND_FINDINGS">
+  <!-- TODO: Same as social preview image above -->
+  <meta name="twitter:image" content="https://YOUR_DOMAIN.com/static/images/social_preview.png">
+  <meta name="twitter:image:alt" content="HiPixel: Forcing a Representation Hierarchy in Pixel Diffusion Transformers - Research Preview">
+
+  <!-- Academic/Research Specific -->
+  <meta name="citation_title" content="HiPixel: Forcing a Representation Hierarchy in Pixel Diffusion Transformers">
+  <meta name="citation_author" content="Pan, Zihao">
+  <meta name="citation_author" content="Shi, Cheng">
+  <meta name="citation_author" content="Hu, Taihang">
+  <meta name="citation_author" content="Chen, Mengting">
+  <meta name="citation_author" content="Chen, Zhangquan">
+  <meta name="citation_author" content="Lan, Jinsong">
+  <meta name="citation_author" content="Zhu, Xiaoyong">
+  <meta name="citation_author" content="Zheng, Bo">
+  <meta name="citation_author" content="Yang, Sibei">
+  <meta name="citation_publication_date" content="2024">
+  <meta name="citation_conference_title" content="CONFERENCE_NAME">
+  <meta name="citation_pdf_url" content="https://YOUR_DOMAIN.com/static/pdfs/paper.pdf">
+  
+  <!-- Additional SEO -->
+  <meta name="theme-color" content="#2563eb">
+  <meta name="msapplication-TileColor" content="#2563eb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://ajax.googleapis.com">
+  <link rel="preconnect" href="https://documentcloud.adobe.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+
+  <!-- TODO: Replace with your paper title and authors -->
+  <title>HiPixel: Forcing a Representation Hierarchy in Pixel Diffusion Transformers | Academic Research</title>
+  
+  <!-- Favicon and App Icons -->
   <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="apple-touch-icon" href="static/images/favicon.ico">
+  
+  <!-- Critical CSS - Load synchronously -->
   <link rel="stylesheet" href="static/css/bulma.min.css">
-  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
-  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="static/css/index.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  
+  <!-- Non-critical CSS - Load asynchronously -->
+  <link rel="preload" href="static/css/bulma-carousel.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/bulma-slider.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  <!-- Fallback for browsers that don't support preload -->
+  <noscript>
+    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  </noscript>
+  
+  <!-- Fonts - Optimized loading -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Defer non-critical JavaScript -->
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
   <script defer src="static/js/fontawesome.all.min.js"></script>
-  <script src="static/js/bulma-carousel.min.js"></script>
-  <script src="static/js/bulma-slider.min.js"></script>
-  <script src="static/js/index.js"></script>
+  <script defer src="static/js/bulma-carousel.min.js"></script>
+  <script defer src="static/js/bulma-slider.min.js"></script>
+  <script defer src="static/js/index.js"></script>
+  
+  <!-- Structured Data for Academic Papers -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "headline": "HiPixel: Forcing a Representation Hierarchy in Pixel Diffusion Transformers",
+    "description": "BRIEF_DESCRIPTION_OF_YOUR_RESEARCH_CONTRIBUTION_AND_FINDINGS",
+    "author": [
+      {
+        "@type": "Person",
+        "name": "Zihao Pan",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "Sun Yat-sen University; Alibaba Group"
+        }
+      },
+      {
+        "@type": "Person",
+        "name": "Cheng Shi",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "The University of Hong Kong"
+        }
+      },
+      {
+        "@type": "Person",
+        "name": "Taihang Hu",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "Alibaba Group"
+        }
+      },
+      {
+        "@type": "Person",
+        "name": "Mengting Chen",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "Alibaba Group"
+        }
+      },
+      {
+        "@type": "Person",
+        "name": "Zhangquan Chen",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "THU"
+        }
+      },
+      {
+        "@type": "Person",
+        "name": "Jinsong Lan",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "Alibaba Group"
+        }
+      },
+      {
+        "@type": "Person",
+        "name": "Xiaoyong Zhu",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "Alibaba Group"
+        }
+      },
+      {
+        "@type": "Person",
+        "name": "Bo Zheng",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "Alibaba Group"
+        }
+      },
+      {
+        "@type": "Person",
+        "name": "Sibei Yang",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "Sun Yat-sen University"
+        }
+      }
+    ],
+    "datePublished": "2024-01-01",
+    "publisher": {
+      "@type": "Organization",
+      "name": "CONFERENCE_OR_JOURNAL_NAME"
+    },
+    "url": "https://YOUR_DOMAIN.com/YOUR_PROJECT_PAGE",
+    "image": "https://YOUR_DOMAIN.com/static/images/social_preview.png",
+    "keywords": ["KEYWORD1", "KEYWORD2", "KEYWORD3", "machine learning", "computer vision"],
+    "abstract": "FULL_ABSTRACT_TEXT_HERE",
+    "citation": "BIBTEX_CITATION_HERE",
+    "isAccessibleForFree": true,
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "mainEntity": {
+      "@type": "WebPage",
+      "@id": "https://YOUR_DOMAIN.com/YOUR_PROJECT_PAGE"
+    },
+    "about": [
+      {
+        "@type": "Thing",
+        "name": "RESEARCH_AREA_1"
+      },
+      {
+        "@type": "Thing", 
+        "name": "RESEARCH_AREA_2"
+      }
+    ]
+  }
+  </script>
+  
+  <!-- Website/Organization Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "INSTITUTION_OR_LAB_NAME",
+    "url": "https://YOUR_INSTITUTION_WEBSITE.com",
+    "logo": "https://YOUR_DOMAIN.com/static/images/favicon.ico",
+    "sameAs": [
+      "https://twitter.com/YOUR_TWITTER_HANDLE",
+      "https://github.com/YOUR_GITHUB_USERNAME"
+    ]
+  }
+  </script>
 </head>
 <body>
 
-<!-- Title and Authors -->
-<section class="hero">
-  <div class="hero-body">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">
-            What Matters for Diffusion-Friendly Latent Manifold? <br> Prior-Aligned Autoencoders for Latent Diffusion
-          </h1>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block"><a href="https://scholar.google.com.hk/citations?user=l2WXe8cAAAAJ&hl=zh-CN" target="_blank">Zhengrong Yue</a><sup>1,2</sup>,</span>
-            <span class="author-block">Taihang Hu<sup>2</sup>,</span>
-            <span class="author-block">Mengting Chen<sup>2,&dagger;</sup>,</span>
-            <span class="author-block">Haiyu Zhang<sup>4</sup>,</span>
-            <span class="author-block">Zihao Pan<sup>5,2</sup>,</span>
-            <span class="author-block">Tao Liu<sup>6,2</sup>,</span>
-            <span class="author-block">Zikang Wang<sup>1</sup>,</span>
-            <span class="author-block">Jinsong Lan<sup>2</sup>,</span>
-            <span class="author-block">Xiaoyong Zhu<sup>2</sup>,</span>
-            <span class="author-block">Bo Zheng<sup>2,&#9993;</sup>,</span>
-            <span class="author-block"><a href="https://scholar.google.com/citations?user=hD948dkAAAAJ&hl=zh-CN" target="_blank">Yali Wang</a><sup>3,7,&#9993;</sup></span>
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <!-- More Works Dropdown -->
+  <div class="more-works-container">
+    <button class="more-works-btn" onclick="toggleMoreWorks()" title="View More Works from Our Lab">
+      <i class="fas fa-flask"></i>
+      More Works
+      <i class="fas fa-chevron-down dropdown-arrow"></i>
+    </button>
+    <div class="more-works-dropdown" id="moreWorksDropdown">
+      <div class="dropdown-header">
+        <h4>More Works from Our Lab</h4>
+        <button class="close-btn" onclick="toggleMoreWorks()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="works-list">
+        <!-- TODO: Replace with your lab's related works -->
+        <a href="https://arxiv.org/abs/PAPER_ID_1" class="work-item" target="_blank">
+          <div class="work-info">
+            <!-- TODO: Replace with actual paper title -->
+            <h5>Paper Title 1</h5>
+            <!-- TODO: Replace with brief description -->
+            <p>Brief description of the work and its main contribution.</p>
+            <!-- TODO: Replace with venue and year -->
+            <span class="work-venue">Conference/Journal 2024</span>
           </div>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block"><sup>1</sup>Shanghai Jiao Tong University</span>
-            <span class="author-block"><sup>2</sup>Alibaba Group</span>
-            <span class="author-block"><sup>3</sup>Shenzhen Institutes of Advanced Technology, CAS</span>
-            <span class="author-block"><sup>4</sup>Beihang University</span>
-            <span class="author-block"><sup>5</sup>Sun Yat-sen University</span>
-            <span class="author-block"><sup>6</sup>Nankai University</span>
-            <span class="author-block"><sup>7</sup>Shanghai AI Laboratory</span>
-            <span class="cor-auth"><small><br><sup>&dagger;</sup>Project Leader, &#9993; Corresponding Author</small></span>
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+        <!-- TODO: Add more related works or remove extra items -->
+        <a href="https://arxiv.org/abs/PAPER_ID_2" class="work-item" target="_blank">
+          <div class="work-info">
+            <h5>Paper Title 2</h5>
+            <p>Brief description of the work and its main contribution.</p>
+            <span class="work-venue">Conference/Journal 2023</span>
           </div>
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+        <a href="https://arxiv.org/abs/PAPER_ID_3" class="work-item" target="_blank">
+          <div class="work-info">
+            <h5>Paper Title 3</h5>
+            <p>Brief description of the work and its main contribution.</p>
+            <span class="work-venue">Conference/Journal 2023</span>
+          </div>
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <main id="main-content">
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
           <div class="column has-text-centered">
-            <div class="publication-links">
-              <span class="link-block">
-                <a href="#" target="_blank" class="external-link button is-normal is-rounded is-dark">
-                <span class="icon"><i class="fas fa-file-pdf"></i></span>
-                <span>Paper</span>
-                </a>
+            <!-- TODO: Replace with your paper title -->
+            <h1 class="title is-1 publication-title">HiPixel: Forcing a Representation Hierarchy in Pixel Diffusion Transformers</h1>
+            <div class="is-size-5 publication-authors">
+              <!-- TODO: Replace with your paper authors and their personal links -->
+              <span class="author-block">
+                <a>Zihao Pan</a><sup>1,2</sup>,
               </span>
-              <span class="link-block">
-                <a href="https://github.com/ZhengrongYue/PAE" target="_blank" class="external-link button is-normal is-rounded is-dark">
-                <span class="icon"><i class="fab fa-github"></i></span>
-                <span>Code</span>
-                </a>
+              <span class="author-block">
+                <a>Cheng Shi</a><sup>3</sup>,
               </span>
-              <span class="link-block">
-                <a href="https://huggingface.co/yuezhengrong/PAE-collections" target="_blank" class="external-link button is-normal is-rounded is-dark">
-                <span class="icon"><i class="fas fa-cube"></i></span>
-                <span>HuggingFace</span>
-                </a>
+              <span class="author-block">
+                <a>Taihang Hu</a><sup>2</sup>,
               </span>
-              <span class="link-block">
-                <a href="https://www.modelscope.cn/models/ZhengrongYue/PAE-Collections" target="_blank" class="external-link button is-normal is-rounded is-dark">
-                <span class="icon"><i class="fas fa-cube"></i></span>
-                <span>ModelScope</span>
+              <span class="author-block">
+                <a>Mengting Chen</a><sup>2,&dagger;</sup>,
+              </span>
+              <span class="author-block">
+                <a>Zhangquan Chen</a><sup>4</sup>,
+              </span>
+              <span class="author-block">
+                <a>Jinsong Lan</a><sup>2</sup>,
+              </span>
+              <span class="author-block">
+                <a>Xiaoyong Zhu</a><sup>2</sup>,
+              </span>
+              <span class="author-block">
+                <a>Bo Zheng</a><sup>2</sup>,
+              </span>
+              <span class="author-block">
+                <a>Sibei Yang</a><sup>1,*</sup>
+              </span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <!-- TODO: Replace with your institution and conference/journal info -->
+              <span class="author-block"><sup>1</sup> Sun Yat-sen University</span>
+              <span class="author-block"><sup>2</sup> Alibaba Group</span>
+              <span class="author-block"><sup>3</sup> The University of Hong Kong</span>
+              <span class="author-block"><sup>4</sup> THU</span>
+              <!-- TODO: Remove this line if no equal contribution -->
+              <span class="eql-cntrb"><small><br><sup>&dagger;</sup> Project leader. <sup>*</sup> Corresponding author.</small></span>
+            </div>
+
+                  <div class="column has-text-centered">
+                    <div class="publication-links">
+                         <!-- TODO: Update with your arXiv paper ID -->
+                      <span class="link-block">
+                        <a href="https://arxiv.org/pdf/<ARXIV PAPER ID>.pdf" target="_blank"
+                        class="external-link button is-normal is-rounded is-dark">
+                        <span class="icon">
+                          <i class="fas fa-file-pdf"></i>
+                        </span>
+                        <span>Paper</span>
+                      </a>
+                    </span>
+
+                    <!-- TODO: Add your supplementary material PDF or remove this section -->
+                    <span class="link-block">
+                      <a href="static/pdfs/supplementary_material.pdf" target="_blank"
+                      class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon">
+                        <i class="fas fa-file-pdf"></i>
+                      </span>
+                      <span>Supplementary</span>
+                    </a>
+                  </span>
+
+                  <!-- TODO: Replace with your GitHub repository URL -->
+                  <span class="link-block">
+                    <a href="https://github.com/YOUR REPO HERE" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+
+                <!-- TODO: Update with your arXiv paper ID -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/<ARXIV PAPER ID>" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
                 </a>
               </span>
             </div>
@@ -99,208 +399,208 @@
   </div>
 </section>
 
-<!-- Teaser Figure -->
+
+<!-- Teaser video-->
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <img src="static/images/pae_teaser.png" alt="PAE Teaser" style="width: 100%;" />
-      <h2 class="subtitle has-text-centered" style="margin-top: 10px;">
-        <b>Prior alignment constructs a diffusion-friendly latent manifold.</b>
-        <i>Left:</i> Compared with reconstruction-oriented counterparts, the prior-aligned latent manifold is more structurally coherent, locally continuous, and semantically organized.
-        <i>Right:</i> PAE yields faster convergence, better generation quality, and robust few-step sampling performance.
+      <!-- TODO: Replace with your teaser video -->
+      <video poster="" id="tree" autoplay controls muted loop height="100%" preload="metadata">
+        <!-- TODO: Add your video file path here -->
+        <source src="static/videos/banner_video.mp4" type="video/mp4">
+      </video>
+      <!-- TODO: Replace with your video description -->
+      <h2 class="subtitle has-text-centered">
+        Aliquam vitae elit ullamcorper tellus egestas pellentesque. Ut lacus tellus, maximus vel lectus at, placerat pretium mi. Maecenas dignissim tincidunt vestibulum. Sed consequat hendrerit nisl ut maximus. 
       </h2>
     </div>
   </div>
 </section>
+<!-- End teaser video -->
 
-<!-- Abstract -->
+<!-- Paper abstract -->
 <section class="section hero is-light">
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
+          <!-- TODO: Replace with your paper abstract -->
           <p>
-            Tokenizers are a crucial component of latent diffusion models, as they define the latent space in which diffusion models operate. However, existing tokenizers are primarily designed to improve reconstruction fidelity or inherit pretrained representations, leaving unclear what kind of latent space is truly friendly for generative modeling. In this paper, we study this question from the perspective of latent manifold organization. By constructing controlled tokenizer variants, we identify three key properties of a diffusion-friendly latent manifold: <b>coherent spatial structure</b>, <b>local manifold continuity</b>, and <b>global manifold semantics</b>. We find that these properties are more consistent with downstream generation quality than reconstruction fidelity. Motivated by this finding, we propose the <b><i>Prior-Aligned AutoEncoder</i></b> (<b>PAE</b>), which explicitly shapes the latent manifold instead of leaving diffusion-friendly manifold to emerge indirectly from reconstruction or inheritance. Specifically, PAE leverages refined priors derived from VFMs and perturbation-based regularization to turn spatial structure, local continuity, and global semantics into explicit training objectives. On ImageNet 256&times;256, PAE improves both training efficiency and generation quality over existing tokenizers, reaching performance comparable to RAE with up to <b>13&times; faster convergence</b> under the same training setup and achieving a new state-of-the-art gFID of <b>1.03</b>. These results highlight the importance of organizing the latent manifold for latent diffusion models.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ullamcorper tellus sed ante aliquam tempus. Etiam porttitor urna feugiat nibh elementum, et tempor dolor mattis. Donec accumsan enim augue, a vulputate nisi sodales sit amet. Proin bibendum ex eget mauris cursus euismod nec et nibh. Maecenas ac gravida ante, nec cursus dui. Vivamus purus nibh, placerat ac purus eget, sagittis vestibulum metus. Sed vestibulum bibendum lectus gravida commodo. Pellentesque auctor leo vitae sagittis suscipit.
           </p>
         </div>
       </div>
     </div>
   </div>
 </section>
+<!-- End paper abstract -->
 
-<!-- Motivation -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">What Makes a Latent Manifold Diffusion-Friendly?</h2>
-        <div class="content has-text-justified">
-          <p>
-            We conduct controlled pilot experiments to investigate what latent manifold properties matter for downstream diffusion. As shown below, better reconstruction alone (rFID) does not guarantee better generation quality (gFID). In contrast, improvements in <b>spatial structure coherence (SSC)</b>, <b>local manifold continuity (LPC)</b>, and <b>global manifold semantics (GSQ)</b> consistently correlate with better generation across controlled tokenizer variants.
-          </p>
+
+<!-- Image carousel -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+       <div class="item">
+        <!-- TODO: Replace with your research result images -->
+        <img src="static/images/carousel1.jpg" alt="First research result visualization" loading="lazy"/>
+        <!-- TODO: Replace with description of this result -->
+        <h2 class="subtitle has-text-centered">
+          First image description.
+        </h2>
+      </div>
+      <div class="item">
+        <!-- Your image here -->
+        <img src="static/images/carousel2.jpg" alt="Second research result visualization" loading="lazy"/>
+        <h2 class="subtitle has-text-centered">
+          Second image description.
+        </h2>
+      </div>
+      <div class="item">
+        <!-- Your image here -->
+        <img src="static/images/carousel3.jpg" alt="Third research result visualization" loading="lazy"/>
+        <h2 class="subtitle has-text-centered">
+         Third image description.
+       </h2>
+     </div>
+     <div class="item">
+      <!-- Your image here -->
+      <img src="static/images/carousel4.jpg" alt="Fourth research result visualization" loading="lazy"/>
+      <h2 class="subtitle has-text-centered">
+        Fourth image description.
+      </h2>
+    </div>
+  </div>
+</div>
+</div>
+</section>
+<!-- End image carousel -->
+
+
+
+
+<!-- Youtube video -->
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+      <!-- Paper video. -->
+      <h2 class="title is-3">Video Presentation</h2>
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          
+          <div class="publication-video">
+            <!-- TODO: Replace with your YouTube video ID -->
+            <iframe src="https://www.youtube.com/embed/JkaxUblCGz0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          </div>
         </div>
-        <img src="static/images/pae_motivation.png" alt="Pilot Experiments" style="width: 100%;" />
       </div>
     </div>
   </div>
 </section>
+<!-- End youtube video -->
 
-<!-- Framework -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">PAE Framework</h2>
-        <div class="content has-text-justified">
-          <p>
-            PAE uses a frozen Vision Foundation Model (VFM) as a semantic reference. A <b>Detail-Aware Modulator (DAM)</b> injects pixel-level details while preserving the VFM as the dominant semantic source. On top of this backbone, three <b>prior-alignment objectives</b> explicitly shape the latent manifold:
-          </p>
-          <ul>
-            <li><b>Spatial Structure Regularization (SSR)</b> preserves instance-level spatial structure by aligning each latent with its corresponding VFM feature.</li>
-            <li><b>Manifold Continuity Regularization (MCR)</b> promotes local manifold continuity by perturbing latents and enforcing perceptual consistency between decoded outputs.</li>
-            <li><b>Semantic Consistency Regularization (SCR)</b> preserves global manifold semantics by aligning the latent manifold with globally pooled VFM features.</li>
-          </ul>
+
+<!-- Video carousel -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Another Carousel</h2>
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-video1">
+          <!-- TODO: Add poster image for better preview -->
+          <video poster="" id="video1" controls muted loop height="100%" preload="metadata">
+            <!-- Your video file here -->
+            <source src="static/videos/carousel1.mp4" type="video/mp4">
+          </video>
         </div>
-        <img src="static/images/pae_framework.png" alt="PAE Framework" style="width: 100%;" />
+        <div class="item item-video2">
+          <!-- TODO: Add poster image for better preview -->
+          <video poster="" id="video2" controls muted loop height="100%" preload="metadata">
+            <!-- Your video file here -->
+            <source src="static/videos/carousel2.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-video3">
+          <!-- TODO: Add poster image for better preview -->
+          <video poster="" id="video3" controls muted loop height="100%" preload="metadata">
+            <!-- Your video file here -->
+            <source src="static/videos/carousel3.mp4" type="video/mp4">
+          </video>
+        </div>
       </div>
     </div>
   </div>
 </section>
+<!-- End video carousel -->
 
-<!-- Refined VFM Priors -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Refining VFM Priors</h2>
-        <div class="content has-text-justified">
-          <p>
-            Raw VFM features are not directly suitable as alignment targets: they can be channel-redundant for semantic supervision and spatially imprecise at tokenizer resolution. PAE introduces a lightweight refinement strategy that compresses VFM features into bottleneck-matched semantic targets while applying low-pass spatial refinement for cleaner structural supervision.
-          </p>
-        </div>
-        <img src="static/images/pae_refine_vfm.png" alt="Refined VFM Priors" style="width: 100%;" />
+
+
+
+
+
+<!-- Paper poster -->
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title">Poster</h2>
+
+      <!-- TODO: Replace with your poster PDF -->
+      <iframe  src="static/pdfs/sample.pdf" width="100%" height="550">
+          </iframe>
+        
       </div>
     </div>
-  </div>
-</section>
+  </section>
+<!--End paper poster -->
 
-<!-- Metrics Comparison -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Fidelity&ndash;Learnability Trade-off</h2>
-        <div class="content has-text-justified">
-          <p>
-            Previous tokenizers typically trade reconstruction fidelity against downstream learnability, whereas PAE achieves both. The balanced latent geometry&mdash;strong spatial structure, local continuity, and global semantics&mdash;explains PAE's improved generation quality.
-          </p>
-        </div>
-        <img src="static/images/pae_metrics_comp.png" alt="Metrics Comparison" style="width: 100%;" />
+
+
+<!--BibTex citation -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <div class="bibtex-header">
+        <h2 class="title">BibTeX</h2>
+        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+          <i class="fas fa-copy"></i>
+          <span class="copy-text">Copy</span>
+        </button>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- Generation Visualization -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column">
-        <h2 class="title is-3">Generated Samples</h2>
-        <div class="content has-text-justified">
-          <p>
-            Class-conditional samples generated by PAE with LightningDiT-XL/1 on ImageNet 256&times;256 demonstrate excellent image quality with rich details, coherent structures, and diverse content.
-          </p>
-        </div>
-        <img src="static/images/pae_gen_vis.png" alt="Generated Samples" style="width: 100%;" />
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Qualitative Comparison -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column">
-        <h2 class="title is-3">Qualitative Comparison</h2>
-        <div class="content has-text-justified">
-          <p>
-            <b>(a) Reconstruction:</b> PAE outperforms other tokenizers in reconstructing fine details (e.g., thin structures, text, and faces).
-            <b>(b) Generation:</b> ImageNet samples from LightningDiT-XL/1 (80 epochs) demonstrating the high fidelity and coherence of PAE.
-          </p>
-        </div>
-        <img src="static/images/pae_vis_comp.png" alt="Qualitative Comparison" style="width: 100%;" />
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Latent Interpolation -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Latent Interpolation</h2>
-        <div class="content has-text-justified">
-          <p>
-            PAE produces a smooth and semantically meaningful latent space. Interpolating between two latent codes yields natural transitions, demonstrating the local continuity of the learned manifold.
-          </p>
-        </div>
-        <img src="static/images/pae_latent_interp.png" alt="Latent Interpolation" style="width: 100%;" />
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- t-SNE Visualization -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Latent Space Visualization</h2>
-        <div class="content has-text-justified">
-          <p>
-            t-SNE visualization of the latent space shows that PAE produces well-organized semantic clusters, confirming the effectiveness of prior alignment in shaping global manifold semantics.
-          </p>
-        </div>
-        <img src="static/images/pae_tsne_vis.png" alt="t-SNE Visualization" style="width: 100%;" />
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- BibTeX -->
-<section class="section" id="BibTeX">
-  <div class="container is-max-desktop content">
-    <h2 class="title">BibTeX</h2>
-    <pre><code>@misc{yue2026mattersdiffusionfriendlylatentmanifold,
-  title={What Matters for Diffusion-Friendly Latent Manifold? Prior-Aligned Autoencoders for Latent Diffusion},
-  author={Zhengrong Yue and Taihang Hu and Mengting Chen and Haiyu Zhang and Zihao Pan and Tao Liu and Zikang Wang and Jinsong Lan and Xiaoyong Zhu and Bo Zheng and Yali Wang},
-  year={2026},
-  eprint={2605.07915},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV},
-  url={https://arxiv.org/abs/2605.07915}, 
+      <pre id="bibtex-code"><code>@article{HiPixel2024,
+  title={HiPixel: Forcing a Representation Hierarchy in Pixel Diffusion Transformers},
+  author={Pan, Zihao and Shi, Cheng and Hu, Taihang and Chen, Mengting and Chen, Zhangquan and Lan, Jinsong and Zhu, Xiaoyong and Zheng, Bo and Yang, Sibei},
+  journal={Conference/Journal Name},
+  year={2024},
+  url={https://your-domain.com/your-project-page}
 }</code></pre>
-  </div>
+    </div>
 </section>
+<!--End BibTex citation -->
 
-<footer class="footer">
+
+  <footer class="footer">
   <div class="container">
     <div class="columns is-centered">
       <div class="column is-8">
         <div class="content">
+
           <p>
-            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
-            You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+            You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
           </p>
+
         </div>
       </div>
     </div>
   </div>
 </footer>
 
-</body>
-</html>
+<!-- Statcounter tracking code -->
+  
+<!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+
+    <!-- End of Statcounter Code -->
+
+  </body>
+  </html>
